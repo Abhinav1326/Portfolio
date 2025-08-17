@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Abhinav Gore",
-  description: "Created by Abhinav",
+  description: "Created by Abhinav Gore, a full-stack developer specializing in React, Next.js, and Python.",
 };
 
 export default function RootLayout({

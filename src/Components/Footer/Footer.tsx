@@ -18,7 +18,7 @@ const Footer = () => {
         {/* Social Links */}
         <div className="flex gap-6">
           <a
-            href="https://github.com/yourusername"
+            href="https://github.com/Abhinav1326"
             target="_blank"
             rel="noopener noreferrer"
             className="p-3 rounded-xl bg-[#e0e5ec] shadow-[8px_8px_16px_#bebebe,-8px_-8px_16px_#ffffff] hover:shadow-[inset_8px_8px_16px_#bebebe,inset_-8px_-8px_16px_#ffffff] transition-all duration-300"
@@ -26,7 +26,7 @@ const Footer = () => {
             <Github size={20} />
           </a>
           <a
-            href="https://linkedin.com/in/yourusername"
+            href="https://www.linkedin.com/in/abhinavgore13/"
             target="_blank"
             rel="noopener noreferrer"
             className="p-3 rounded-xl bg-[#e0e5ec] shadow-[8px_8px_16px_#bebebe,-8px_-8px_16px_#ffffff] hover:shadow-[inset_8px_8px_16px_#bebebe,inset_-8px_-8px_16px_#ffffff] transition-all duration-300"

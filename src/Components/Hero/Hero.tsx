@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaReact, FaPython, FaNodeJs } from "react-icons/fa";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { useEffect, useState } from "react";
 import { loadFull } from "tsparticles";
 
 export default function Hero() {
@@ -23,7 +22,14 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e0e5ec] to-[#f1f3f6] px-6 overflow-hidden"
     >
-      {/* Particles Background */}
+      {/* Skybox 3D Background */}
+      {/* <iframe
+        src="https://skybox.blockadelabs.com/e/2bcd98a649d01ec8e969b2496957c781"
+        className="absolute top-0 left-0 w-full h-full border-0 z-0"
+        allow="fullscreen"
+      ></iframe> */}
+
+      {/* Optional Particles Overlay (still keeping subtle) */}
       {init && (
         <Particles
           id="tsparticles"
@@ -39,38 +45,39 @@ export default function Hero() {
               size: { value: { min: 1, max: 3 } },
             },
           }}
-          className="absolute inset-0"
+          className="absolute inset-0 z-10"
         />
       )}
 
       {/* Floating Glass Blob */}
       <motion.div
-        className="absolute w-72 h-72 rounded-full bg-white/20 backdrop-blur-lg border border-white/30 shadow-[8px_8px_16px_#a3b1c6,_-8px_-8px_16px_#ffffff]"
+        className="absolute w-72 h-72 rounded-full bg-white/20 backdrop-blur-lg border border-white/30 shadow-[8px_8px_16px_#a3b1c6,_-8px_-8px_16px_#ffffff] z-10"
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
       />
 
       {/* Another Glass Blob */}
       <motion.div
-        className="absolute bottom-10 right-10 w-64 h-64 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-[6px_6px_12px_#a3b1c6,_-6px_-6px_12px_#ffffff]"
+        className="absolute bottom-10 right-10 w-64 h-64 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-[6px_6px_12px_#a3b1c6,_-6px_-6px_12px_#ffffff] z-10"
         animate={{ y: [0, -20, 0] }}
         transition={{ repeat: Infinity, duration: 4 }}
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-10">
+      <div className="relative z-20 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-10">
         {/* Left Text */}
         <div className="text-center md:text-left">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4">
             Hi, I’m{" "}
             <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-              Abhi
+              Abhinav
             </span>
             👋
           </h1>
           <p className="text-lg text-gray-600 mb-6 max-w-md">
-            I’m a full-stack developer specializing in React, Next.js, and Python.
-            I build modern, smooth, and performance-driven web experiences.
+            I’m a full-stack developer specializing in React, Next.js, and
+            Python. I build modern, smooth, and performance-driven web
+            experiences.
           </p>
 
           {/* CTA Button */}
@@ -87,8 +94,8 @@ export default function Hero() {
         {/* Right Side Tech Icons */}
         <div className="flex gap-6">
           {[{ icon: FaReact, color: "text-blue-400" },
-            { icon: FaPython, color: "text-yellow-500" },
-            { icon: FaNodeJs, color: "text-green-500" }].map((tech, i) => (
+          { icon: FaPython, color: "text-yellow-500" },
+          { icon: FaNodeJs, color: "text-green-500" }].map((tech, i) => (
             <motion.div
               key={i}
               animate={{ y: [0, -15, 0] }}

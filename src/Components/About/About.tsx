@@ -2,7 +2,8 @@
 
 import React, { useRef } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { FaReact, FaPython, FaNodeJs, FaDatabase } from "react-icons/fa";
+import { FaReact, FaPython, FaNodeJs, FaDatabase, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FiDownload } from "react-icons/fi";
 
 export default function About() {
   const x = useMotionValue(0);
@@ -67,13 +68,17 @@ export default function About() {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
             About Me
           </h2>
-          <p className="text-gray-600 mb-6 max-w-lg">
-            I’m Abhi — a full-stack developer passionate about crafting modern, smooth, and high-performance web applications. 
-            With expertise in <strong>React, Next.js, Python, and Node.js</strong>, I blend creative design with clean code.
+
+          {/* Short Intro */}
+          <p className="text-gray-600 mb-4 max-w-lg">
+            Hi, I’m <span className="font-semibold">Abhinav</span> — a full-stack developer passionate about crafting modern, smooth, and high-performance web applications. With expertise in
+            {" "}
+            <strong>React, Next.js, Python, and Node.js</strong>,
+            I blend creative design with clean code.
           </p>
 
           {/* Skills */}
-          <div className="grid grid-cols-2 gap-4 max-w-sm">
+          <div className="grid grid-cols-2 gap-4 max-w-sm mb-6">
             {[
               { icon: <FaReact className="text-blue-400 text-2xl" />, label: "React / Next.js" },
               { icon: <FaPython className="text-yellow-500 text-2xl" />, label: "Python" },
@@ -90,6 +95,47 @@ export default function About() {
                 <span className="text-gray-700 font-medium">{skill.label}</span>
               </motion.div>
             ))}
+          </div>
+
+          {/* Buttons */}
+          <div className="flex items-center gap-4 flex-wrap">
+            <a
+              href="/Abhi Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-blue-400 to-purple-500 text-white font-medium shadow-lg hover:scale-105 transition"
+            >
+              <FiDownload /> Download Resume
+            </a>
+            <a
+              href="#projects"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-medium shadow-lg hover:scale-105 transition"
+            >
+              View Projects
+            </a>
+          </div>
+
+          {/* Socials */}
+          <div className="mt-6">
+            <p className="text-gray-600 mb-2">Let’s connect 👇</p>
+            <div className="flex gap-4">
+              <a
+                href="https://www.linkedin.com/in/abhinavgore13/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-xl backdrop-blur-lg bg-white/20 border border-white/30 shadow hover:scale-110 transition"
+              >
+                <FaLinkedin className="text-blue-600 text-2xl" />
+              </a>
+              <a
+                href="https://github.com/Abhinav1326"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-xl backdrop-blur-lg bg-white/20 border border-white/30 shadow hover:scale-110 transition"
+              >
+                <FaGithub className="text-gray-800 text-2xl" />
+              </a>
+            </div>
           </div>
         </motion.div>
       </div>

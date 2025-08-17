@@ -30,7 +30,7 @@ export default function About() {
         style={{ bottom: "5%", right: "10%" }}
       />
 
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
+      <div className="max-w-6xl my-10 mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left Side - Tilt Image */}
         <motion.div
           initial={{ x: -50, opacity: 0 }}

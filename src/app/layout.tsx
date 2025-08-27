@@ -7,6 +7,8 @@ import About from "@/Components/About/About";
 import Projects from "@/Components/Projects/Projects";
 import Skills from "@/Components/Skills/Skills";
 import Footer from "@/Components/Footer/Footer";
+import Contact from "@/Components/Contact/Contact";
+import AnimeBuddyOverlay from "@/Components/AnimeBuddyOverlay";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,11 +35,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AnimeBuddyOverlay imageSrc="/cat.gif" size={140} />
         <Navbar />
         <Hero />
         <About />
         <Projects />
         <Skills />
+        <Contact />
         <Footer />
         {children}
       </body>

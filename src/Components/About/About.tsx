@@ -1,16 +1,11 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { FaReact, FaPython, FaNodeJs, FaDatabase, FaGithub, FaLinkedin } from "react-icons/fa";
+import React from "react";
+import { motion } from "framer-motion";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FiDownload } from "react-icons/fi";
 
 export default function About() {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-50, 50], [10, -10]);
-  const rotateY = useTransform(x, [-50, 50], [-10, 10]);
-
   return (
     <section
       id="about"
@@ -30,75 +25,39 @@ export default function About() {
         style={{ bottom: "5%", right: "10%" }}
       />
 
-      <div className="max-w-6xl my-10 mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
-        {/* Left Side - Tilt Image */}
+      <div className="max-w-6xl my-10 mx-auto grid md:grid-cols-2 gap-12 items-start relative z-10">
+        {/* Left Side - Image + Quick Info + Buttons + Socials */}
         <motion.div
           initial={{ x: -50, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="flex justify-center"
+          className="flex flex-col items-center gap-6"
         >
-          <motion.div
-            style={{ rotateX, rotateY }}
-            onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              x.set(e.clientX - rect.left - rect.width / 2);
-              y.set(e.clientY - rect.top - rect.height / 2);
-            }}
-            onMouseLeave={() => {
-              x.set(0);
-              y.set(0);
-            }}
-            className="relative w-64 h-64 rounded-2xl overflow-hidden backdrop-blur-lg bg-white/20 border border-white/30 shadow-[8px_8px_16px_#a3b1c6,_-8px_-8px_16px_#ffffff] transition-transform"
-          >
+          {/* Profile Image */}
+          <div className="relative w-64 h-64 rounded-2xl overflow-hidden backdrop-blur-lg bg-white/20 border border-white/30 shadow-[8px_8px_16px_#a3b1c6,_-8px_-8px_16px_#ffffff]">
             <img
               src="/Photo.jpg"
-              alt="Abhi"
+              alt="Abhinav"
               className="w-full h-full object-cover"
             />
-          </motion.div>
-        </motion.div>
+          </div>
 
-        {/* Right Side - Text & Skills */}
-        <motion.div
-          initial={{ x: 50, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            About Me
-          </h2>
-
-          {/* Short Intro */}
-          <p className="text-gray-600 mb-4 max-w-lg">
-            Hi, I’m <span className="font-semibold">Abhinav</span> — a full-stack developer passionate about crafting modern, smooth, and high-performance web applications. With expertise in
-            {" "}
-            <strong>React, Next.js, Python, and Node.js</strong>,
-            I blend creative design with clean code.
-          </p>
-
-          {/* Skills */}
-          <div className="grid grid-cols-2 gap-4 max-w-sm mb-6">
-            {[
-              { icon: <FaReact className="text-blue-400 text-2xl" />, label: "React / Next.js" },
-              { icon: <FaPython className="text-yellow-500 text-2xl" />, label: "Python" },
-              { icon: <FaNodeJs className="text-green-500 text-2xl" />, label: "Node.js" },
-              { icon: <FaDatabase className="text-purple-500 text-2xl" />, label: "Databases" },
-            ].map((skill, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.08, boxShadow: "0px 0px 15px rgba(0,0,0,0.2)" }}
-                transition={{ type: "spring", stiffness: 200 }}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#e0e5ec] border border-[#f1f3f6] shadow-[6px_6px_12px_#a3b1c6,_-6px_-6px_12px_#ffffff] cursor-pointer"
-              >
-                {skill.icon}
-                <span className="text-gray-700 font-medium">{skill.label}</span>
-              </motion.div>
-            ))}
+          {/* Quick Info Section */}
+          <div className="w-full p-5 rounded-2xl bg-[#e0e5ec] border border-[#f1f3f6] shadow-[6px_6px_12px_#a3b1c6,_-6px_-6px_12px_#ffffff] text-center">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Abhinav Raosaheb Gore
+            </h3>
+            <p className="text-gray-600 text-sm mb-3">
+              Full-Stack Developer | MERN | Python
+            </p>
+            <p className="text-gray-600 text-sm">
+              📞 +91 8530684793 <br />
+              📧 abhinavrbgore13@gmail.com
+            </p>
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-4 flex-wrap justify-center">
             <a
               href="/Abhi Resume.pdf"
               target="_blank"
@@ -116,9 +75,9 @@ export default function About() {
           </div>
 
           {/* Socials */}
-          <div className="mt-6">
+          <div className=" text-center">
             <p className="text-gray-600 mb-2">Let’s connect 👇</p>
-            <div className="flex gap-4">
+            <div className="flex gap-4 justify-center">
               <a
                 href="https://www.linkedin.com/in/abhinavgore13/"
                 target="_blank"
@@ -137,6 +96,54 @@ export default function About() {
               </a>
             </div>
           </div>
+        </motion.div>
+
+        {/* Right Side - Details */}
+        <motion.div
+          initial={{ x: 50, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            About Me
+          </h2>
+
+          <p className="text-gray-600 mb-6 max-w-lg">
+            Hi, I’m <span className="font-semibold">Abhinav Raosaheb Gore</span>{" "}
+            — a full-stack developer passionate about crafting modern, smooth,
+            and high-performance applications. With expertise in{" "}
+            <strong>React, Next.js, Python, and Node.js</strong>, I love
+            blending creative design with clean code. Outside coding, I enjoy
+            exploring new technologies, solving challenges, and building things
+            that make life easier.
+          </p>
+
+          {/* Education */}
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">Education</h3>
+          <ul className="list-disc list-inside text-gray-600 mb-6 space-y-1">
+            <li>
+              <strong>B.E. (Information Technology)</strong>, Sinhgad Institute
+              of Technology, Lonavala (2021-2025) — CGPA: 8.52
+            </li>
+            <li>
+              <strong>HSC</strong>, Mahatma Gandhi Junior College (2021) —
+              83.33%
+            </li>
+            <li>
+              <strong>SSC</strong>, Vidya Vikas Public School (2019) — 76.00%
+            </li>
+          </ul>
+
+          {/* Certifications */}
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">
+            Certifications
+          </h3>
+          <ul className="list-disc list-inside text-gray-600 mb-6">
+            <li>Google IT Automation with Python (Coursera)</li>
+            <li>AWS Cloud Practitioner Essentials (Coursera)</li>
+            <li>Introduction to Git & GitHub (Coursera)</li>
+            <li>Crash Course on Python (Coursera)</li>
+          </ul>
         </motion.div>
       </div>
     </section>

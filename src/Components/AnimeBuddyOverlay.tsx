@@ -14,15 +14,21 @@ import React, { useEffect, useRef, useState } from "react";
  * - Smooth the dragging movement slightly for a natural feel.
  */
 
+type Props = {
+  idleImages?: string[];
+  runImages?: string[];
+  baseSize?: number;
+};
+
 export default function AnimeBuddyOverlay({
   idleImages = ["/cat.gif", "/cat_dance.gif", "/cat_yay.gif"],
   runImages = ["/cat_run.gif", "/cat_jump.gif"],
   baseSize = 70,
-}) {
-  const ref = useRef(null);
-  const pos = useRef({ x: 100, y: 100 });
-  const prevPointer = useRef({ x: 0, y: 0 });
-  const target = useRef({ x: 100, y: 100 });
+}: Props) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const pos = useRef<{ x: number; y: number }>({ x: 100, y: 100 });
+  const prevPointer = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const target = useRef<{ x: number; y: number }>({ x: 100, y: 100 });
   const moving = useRef(false);
   const rafRef = useRef<number | null>(null);
   const lastMoveTime = useRef(0);
@@ -33,9 +39,9 @@ export default function AnimeBuddyOverlay({
   const [runImage, setRunImage] = useState(runImages[0]);
   const [size, setSize] = useState(baseSize * 0.7); // default 30% smaller on normal devices
   const [dragging, setDragging] = useState(false);
-  const dragOffset = useRef({ x: 0, y: 0 });
+  const dragOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,7 +68,7 @@ export default function AnimeBuddyOverlay({
   }, [baseSize, size]);
 
   useEffect(() => {
-    const chooseNewTarget = () => {
+  const chooseNewTarget = () => {
       const maxX = (window.innerWidth || window.screen.width) - size - 6;
       const maxY = (window.innerHeight || window.screen.height) - size - 6;
 
@@ -81,7 +87,7 @@ export default function AnimeBuddyOverlay({
       waitTime.current = 3000 + Math.random() * 2000; // 3–5 sec wait after arriving
     };
 
-    const step = (t) => {
+  const step = (t: number) => {
       const now = performance.now();
 
       if (!dragging) {
@@ -134,14 +140,14 @@ export default function AnimeBuddyOverlay({
     const el = ref.current;
     if (!el) return;
 
-    const onPointerDown = (e) => {
+    const onPointerDown = (e: PointerEvent) => {
       // only primary button
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       e.preventDefault();
       // capture pointer so moves outside the element still track
       try {
         el.setPointerCapture?.(e.pointerId);
-      } catch (err) {}
+      } catch (_err) {}
 
       setDragging(true);
       setIsMoving(false);
@@ -156,7 +162,7 @@ export default function AnimeBuddyOverlay({
       prevPointer.current = { x: e.clientX, y: e.clientY };
     };
 
-    const onPointerMove = (e) => {
+  const onPointerMove = (e: PointerEvent) => {
       if (!dragging) return;
       // desired position (clamped)
       const desiredX = clamp(e.clientX - dragOffset.current.x, 0, window.innerWidth - size);
@@ -173,13 +179,13 @@ export default function AnimeBuddyOverlay({
       prevPointer.current = { x: e.clientX, y: e.clientY };
     };
 
-    const onPointerUp = (e) => {
+    const onPointerUp = (e: PointerEvent) => {
       if (!dragging) return;
       setDragging(false);
       // release pointer capture
       try {
         el.releasePointerCapture?.(e.pointerId);
-      } catch (err) {}
+      } catch (_err) {}
       // resume autonomous movement after a short delay
       lastMoveTime.current = performance.now();
     };

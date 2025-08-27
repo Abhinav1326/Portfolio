@@ -50,7 +50,7 @@ export default function AnimeBuddyOverlay({
   const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   useEffect(() => {
-    const computeSize = () => (window.innerWidth < 640 ? base * 0.5 : base * 1);
+    const computeSize = () => (window.innerWidth < 640 ? base * 0.6 : base * 1);
     const onResize = () => {
       const next = computeSize();
       // Re-clamp position when resizing for responsiveness

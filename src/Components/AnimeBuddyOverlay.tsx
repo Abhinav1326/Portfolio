@@ -17,13 +17,17 @@ import React, { useEffect, useRef, useState } from "react";
 type Props = {
   idleImages?: string[];
   runImages?: string[];
-  baseSize?: number;
+  baseSize?: number; // fallback if `size` (prop) isn't provided
+  imageSrc?: string; // optional initial/idle image override
+  size?: number; // external base size override used for responsive sizing
 };
 
 export default function AnimeBuddyOverlay({
   idleImages = ["/cat.gif", "/cat_dance.gif", "/cat_yay.gif"],
   runImages = ["/cat_run.gif", "/cat_jump.gif"],
-  baseSize = 70,
+  baseSize: baseSizeProp = 70,
+  imageSrc,
+  size: propSize,
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const pos = useRef<{ x: number; y: number }>({ x: 100, y: 100 });
@@ -35,42 +39,41 @@ export default function AnimeBuddyOverlay({
   const waitTime = useRef(0);
   const [isMoving, setIsMoving] = useState(false);
   const [facingRight, setFacingRight] = useState(true);
-  const [idleImage, setIdleImage] = useState(idleImages[0]);
+  const [idleImage, setIdleImage] = useState(imageSrc ?? idleImages[0]);
   const [runImage, setRunImage] = useState(runImages[0]);
-  const [size, setSize] = useState(baseSize * 0.7); // default 30% smaller on normal devices
+  // Internal rendered sprite size; derive from provided prop `size` (preferred) or `baseSize` fallback
+  const base = propSize ?? baseSizeProp;
+  const [spriteSize, setSpriteSize] = useState(base * 0.7);
   const [dragging, setDragging] = useState(false);
   const dragOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        // mobile size
-        setSize(baseSize * 1.5);
-      } else {
-        // normal devices reduced by 30%
-        setSize(baseSize * 2);
-      }
-
+    const computeSize = () => (window.innerWidth < 640 ? base * 0.8 : base * 1);
+    const onResize = () => {
+      const next = computeSize();
       // Re-clamp position when resizing for responsiveness
-      pos.current.x = clamp(pos.current.x, 0, window.innerWidth - size);
-      pos.current.y = clamp(pos.current.y, 0, window.innerHeight - size);
+      pos.current.x = clamp(pos.current.x, 0, window.innerWidth - next);
+      pos.current.y = clamp(pos.current.y, 0, window.innerHeight - next);
+      setSpriteSize(next);
     };
 
-    window.addEventListener("resize", handleResize);
-    handleResize();
+    window.addEventListener("resize", onResize);
 
+    // initial
+    const initial = computeSize();
+    setSpriteSize(initial);
     pos.current.x = 30;
-    pos.current.y = (window.innerHeight || 800) - size - 40;
+    pos.current.y = (window.innerHeight || 800) - initial - 40;
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, [baseSize, size]);
+    return () => window.removeEventListener("resize", onResize);
+  }, [base]);
 
   useEffect(() => {
   const chooseNewTarget = () => {
-      const maxX = (window.innerWidth || window.screen.width) - size - 6;
-      const maxY = (window.innerHeight || window.screen.height) - size - 6;
+      const maxX = (window.innerWidth || window.screen.width) - spriteSize - 6;
+      const maxY = (window.innerHeight || window.screen.height) - spriteSize - 6;
 
       target.current.x = Math.random() * maxX;
       target.current.y = Math.random() * maxY;
@@ -100,7 +103,7 @@ export default function AnimeBuddyOverlay({
           const dy = target.current.y - pos.current.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          const speed = Math.max(window.innerWidth, window.innerHeight) * 0.002;
+    const speed = Math.max(window.innerWidth, window.innerHeight) * 0.002;
           if (dist > speed) {
             pos.current.x += (dx / dist) * speed;
             pos.current.y += (dy / dist) * speed;
@@ -133,7 +136,7 @@ export default function AnimeBuddyOverlay({
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [size, idleImages, runImages, dragging]);
+  }, [spriteSize, idleImages, runImages, dragging]);
 
   // Dragging Handlers (pointer events used for touch + mouse)
   useEffect(() => {
@@ -147,7 +150,7 @@ export default function AnimeBuddyOverlay({
       // capture pointer so moves outside the element still track
       try {
         el.setPointerCapture?.(e.pointerId);
-      } catch (_err) {}
+      } catch {}
 
       setDragging(true);
       setIsMoving(false);
@@ -162,11 +165,11 @@ export default function AnimeBuddyOverlay({
       prevPointer.current = { x: e.clientX, y: e.clientY };
     };
 
-  const onPointerMove = (e: PointerEvent) => {
+    const onPointerMove = (e: PointerEvent) => {
       if (!dragging) return;
       // desired position (clamped)
-      const desiredX = clamp(e.clientX - dragOffset.current.x, 0, window.innerWidth - size);
-      const desiredY = clamp(e.clientY - dragOffset.current.y, 0, window.innerHeight - size);
+      const desiredX = clamp(e.clientX - dragOffset.current.x, 0, window.innerWidth - spriteSize);
+      const desiredY = clamp(e.clientY - dragOffset.current.y, 0, window.innerHeight - spriteSize);
 
       // smooth following for a more natural feel (tweak factor if you want snappier behavior)
       const lerp = 0.25;
@@ -185,7 +188,7 @@ export default function AnimeBuddyOverlay({
       // release pointer capture
       try {
         el.releasePointerCapture?.(e.pointerId);
-      } catch (_err) {}
+      } catch {}
       // resume autonomous movement after a short delay
       lastMoveTime.current = performance.now();
     };
@@ -199,7 +202,7 @@ export default function AnimeBuddyOverlay({
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
-  }, [dragging, size]);
+  }, [dragging, spriteSize]);
 
   return (
     <div
@@ -212,8 +215,8 @@ export default function AnimeBuddyOverlay({
           position: "fixed",
           left: 0,
           top: 0,
-          width: size + "px",
-          height: size + "px",
+          width: spriteSize + "px",
+          height: spriteSize + "px",
           transform: `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)` ,
           willChange: "transform",
           pointerEvents: "auto", // allow pointer on inner container

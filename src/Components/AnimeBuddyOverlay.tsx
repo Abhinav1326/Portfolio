@@ -6,6 +6,8 @@ type Props = {
   runImages?: string[];
   baseSize?: number;
   onClick?: () => void;
+  imageSrc?: string; // compatibility with wrapper
+  size?: number; // fixed size override
 };
 
 /**
@@ -19,6 +21,8 @@ export default function AnimeBuddyOverlay({
   runImages = ["/cat_run.gif", "/cat_jump.gif"],
   baseSize = 70,
   onClick,
+  imageSrc,
+  size: sizeProp,
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const pos = useRef<{ x: number; y: number }>({ x: 100, y: 100 });
@@ -30,9 +34,9 @@ export default function AnimeBuddyOverlay({
   const waitTime = useRef<number>(0);
   const [isMoving, setIsMoving] = useState(false);
   const [facingRight, setFacingRight] = useState(true);
-  const [idleImage, setIdleImage] = useState<string>(idleImages[0]);
+  const [idleImage, setIdleImage] = useState<string>(imageSrc || idleImages[0]);
   const [runImage, setRunImage] = useState<string>(runImages[0]);
-  const [size, setSize] = useState<number>(baseSize * 0.7);
+  const [spriteSize, setSpriteSize] = useState<number>(sizeProp ?? baseSize * 0.7);
   const [dragging, setDragging] = useState<boolean>(false);
   const dragOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const didDrag = useRef<boolean>(false);
@@ -43,23 +47,27 @@ export default function AnimeBuddyOverlay({
   // Responsive sizing and initial placement
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) setSize(baseSize * 1.6);
-      else setSize(baseSize * 2);
-      pos.current.x = clamp(pos.current.x, 0, window.innerWidth - size);
-      pos.current.y = clamp(pos.current.y, 0, window.innerHeight - size);
+      if (sizeProp != null) {
+        setSpriteSize(sizeProp);
+      } else {
+        if (window.innerWidth < 640) setSpriteSize(baseSize * 1);
+        else setSpriteSize(baseSize * 2);
+      }
+      pos.current.x = clamp(pos.current.x, 0, window.innerWidth - (sizeProp ?? spriteSize));
+      pos.current.y = clamp(pos.current.y, 0, window.innerHeight - (sizeProp ?? spriteSize));
     };
     window.addEventListener("resize", handleResize);
     handleResize();
     pos.current.x = 30;
-    pos.current.y = (window.innerHeight || 800) - size - 40;
+    pos.current.y = (window.innerHeight || 800) - (sizeProp ?? spriteSize) - 40;
     return () => window.removeEventListener("resize", handleResize);
-  }, [baseSize, size]);
+  }, [baseSize, sizeProp, spriteSize]);
 
   // Autonomous movement loop
   useEffect(() => {
     const chooseNewTarget = () => {
-      const maxX = (window.innerWidth || window.screen.width) - size - 6;
-      const maxY = (window.innerHeight || window.screen.height) - size - 6;
+  const maxX = (window.innerWidth || window.screen.width) - (sizeProp ?? spriteSize) - 6;
+  const maxY = (window.innerHeight || window.screen.height) - (sizeProp ?? spriteSize) - 6;
       target.current.x = Math.random() * maxX;
       target.current.y = Math.random() * maxY;
       setFacingRight(target.current.x >= pos.current.x);
@@ -87,7 +95,7 @@ export default function AnimeBuddyOverlay({
             pos.current.y = target.current.y;
             moving.current = false;
             setIsMoving(false);
-            setIdleImage(idleImages[Math.floor(Math.random() * idleImages.length)]);
+            setIdleImage(imageSrc || idleImages[Math.floor(Math.random() * idleImages.length)]);
             lastMoveTime.current = now;
           }
         }
@@ -103,7 +111,7 @@ export default function AnimeBuddyOverlay({
 
     rafRef.current = requestAnimationFrame(step);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [size, idleImages, runImages, dragging]);
+  }, [spriteSize, sizeProp, idleImages, runImages, dragging, imageSrc]);
 
   // Dragging and click handlers
   useEffect(() => {
@@ -125,8 +133,8 @@ export default function AnimeBuddyOverlay({
 
     const onPointerMove = (e: PointerEvent) => {
       if (!dragging) return;
-      const desiredX = clamp(e.clientX - dragOffset.current.x, 0, window.innerWidth - size);
-      const desiredY = clamp(e.clientY - dragOffset.current.y, 0, window.innerHeight - size);
+  const desiredX = clamp(e.clientX - dragOffset.current.x, 0, window.innerWidth - (sizeProp ?? spriteSize));
+  const desiredY = clamp(e.clientY - dragOffset.current.y, 0, window.innerHeight - (sizeProp ?? spriteSize));
       const lerp = 0.25;
       pos.current.x += (desiredX - pos.current.x) * lerp;
       pos.current.y += (desiredY - pos.current.y) * lerp;
@@ -164,7 +172,7 @@ export default function AnimeBuddyOverlay({
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
-  }, [dragging, size, onClick]);
+  }, [dragging, spriteSize, sizeProp, onClick]);
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[9999] overflow-visible">
@@ -174,8 +182,8 @@ export default function AnimeBuddyOverlay({
           position: "fixed",
           left: 0,
           top: 0,
-          width: size + "px",
-          height: size + "px",
+          width: (sizeProp ?? spriteSize) + "px",
+          height: (sizeProp ?? spriteSize) + "px",
           transform: `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`,
           willChange: "transform",
           pointerEvents: "auto",

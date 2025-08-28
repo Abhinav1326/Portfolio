@@ -36,7 +36,7 @@ export default function AnimeBuddyOverlay({
   const [facingRight, setFacingRight] = useState(true);
   const [idleImage, setIdleImage] = useState<string>(imageSrc || idleImages[0]);
   const [runImage, setRunImage] = useState<string>(runImages[0]);
-  const [spriteSize, setSpriteSize] = useState<number>(sizeProp ?? baseSize * 0.7);
+  const [spriteSize, setSpriteSize] = useState<number>(sizeProp ?? baseSize * 0.9);
   const [dragging, setDragging] = useState<boolean>(false);
   const dragOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const didDrag = useRef<boolean>(false);
@@ -47,27 +47,25 @@ export default function AnimeBuddyOverlay({
   // Responsive sizing and initial placement
   useEffect(() => {
     const handleResize = () => {
-      if (sizeProp != null) {
-        setSpriteSize(sizeProp);
-      } else {
-        if (window.innerWidth < 640) setSpriteSize(baseSize * 1);
-        else setSpriteSize(baseSize * 2);
-      }
-      pos.current.x = clamp(pos.current.x, 0, window.innerWidth - (sizeProp ?? spriteSize));
-      pos.current.y = clamp(pos.current.y, 0, window.innerHeight - (sizeProp ?? spriteSize));
+      const isMobile = window.innerWidth < 640;
+      const base = sizeProp ?? baseSize;
+      const computed = isMobile ? base * 0.5 : base;
+      setSpriteSize(computed);
+      pos.current.x = clamp(pos.current.x, 0, window.innerWidth - computed);
+      pos.current.y = clamp(pos.current.y, 0, window.innerHeight - computed);
     };
     window.addEventListener("resize", handleResize);
     handleResize();
     pos.current.x = 30;
-    pos.current.y = (window.innerHeight || 800) - (sizeProp ?? spriteSize) - 40;
+    pos.current.y = (window.innerHeight || 800) - spriteSize - 40;
     return () => window.removeEventListener("resize", handleResize);
-  }, [baseSize, sizeProp, spriteSize]);
+  }, [baseSize, sizeProp]);
 
   // Autonomous movement loop
   useEffect(() => {
     const chooseNewTarget = () => {
-  const maxX = (window.innerWidth || window.screen.width) - (sizeProp ?? spriteSize) - 6;
-  const maxY = (window.innerHeight || window.screen.height) - (sizeProp ?? spriteSize) - 6;
+  const maxX = (window.innerWidth || window.screen.width) - spriteSize - 6;
+  const maxY = (window.innerHeight || window.screen.height) - spriteSize - 6;
       target.current.x = Math.random() * maxX;
       target.current.y = Math.random() * maxY;
       setFacingRight(target.current.x >= pos.current.x);
@@ -111,7 +109,7 @@ export default function AnimeBuddyOverlay({
 
     rafRef.current = requestAnimationFrame(step);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [spriteSize, sizeProp, idleImages, runImages, dragging, imageSrc]);
+  }, [spriteSize, idleImages, runImages, dragging, imageSrc]);
 
   // Dragging and click handlers
   useEffect(() => {
@@ -132,9 +130,9 @@ export default function AnimeBuddyOverlay({
     };
 
     const onPointerMove = (e: PointerEvent) => {
-      if (!dragging) return;
-  const desiredX = clamp(e.clientX - dragOffset.current.x, 0, window.innerWidth - (sizeProp ?? spriteSize));
-  const desiredY = clamp(e.clientY - dragOffset.current.y, 0, window.innerHeight - (sizeProp ?? spriteSize));
+    if (!dragging) return;
+  const desiredX = clamp(e.clientX - dragOffset.current.x, 0, window.innerWidth - spriteSize);
+  const desiredY = clamp(e.clientY - dragOffset.current.y, 0, window.innerHeight - spriteSize);
       const lerp = 0.25;
       pos.current.x += (desiredX - pos.current.x) * lerp;
       pos.current.y += (desiredY - pos.current.y) * lerp;
@@ -172,7 +170,7 @@ export default function AnimeBuddyOverlay({
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
-  }, [dragging, spriteSize, sizeProp, onClick]);
+  }, [dragging, spriteSize, onClick]);
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[9999] overflow-visible">
@@ -182,8 +180,8 @@ export default function AnimeBuddyOverlay({
           position: "fixed",
           left: 0,
           top: 0,
-          width: (sizeProp ?? spriteSize) + "px",
-          height: (sizeProp ?? spriteSize) + "px",
+          width: spriteSize + "px",
+          height: spriteSize + "px",
           transform: `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`,
           willChange: "transform",
           pointerEvents: "auto",

@@ -43,7 +43,7 @@ export default function AnimeBuddyOverlay({
   // Responsive sizing and initial placement
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) setSize(baseSize * 1);
+      if (window.innerWidth < 640) setSize(baseSize * 1.6);
       else setSize(baseSize * 2);
       pos.current.x = clamp(pos.current.x, 0, window.innerWidth - size);
       pos.current.y = clamp(pos.current.y, 0, window.innerHeight - size);

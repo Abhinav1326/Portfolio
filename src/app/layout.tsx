@@ -8,7 +8,9 @@ import Projects from "@/Components/Projects/Projects";
 import Skills from "@/Components/Skills/Skills";
 import Footer from "@/Components/Footer/Footer";
 import Contact from "@/Components/Contact/Contact";
-import AnimeBuddyOverlay from "@/Components/AnimeBuddyOverlay";
+// import AnimeBuddyOverlay from "@/Components/AnimeBuddyOverlay";
+// import { ChatBox } from "@/Components/ChatBox/ChatBox";
+import AnimeBuddyWrapper from "@/Components/AnimeBuddyWrapper/AnimeBuddyWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +37,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AnimeBuddyOverlay imageSrc="/cat.gif" size={140} />
+        {/* <AnimeBuddyOverlay imageSrc="/cat.gif" size={140} />
+        <ChatBox visible={chatOpen} onClose={() => setChatOpen(false)} /> */}
+        <AnimeBuddyWrapper />
         <Navbar />
         <Hero />
         <About />

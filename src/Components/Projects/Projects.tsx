@@ -5,12 +5,28 @@ import { motion } from "framer-motion";
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
 
 export default function Projects() {
-  const projects = [
+  type Project = {
+    title: string;
+    link: string; // repository or code link
+    description: string;
+    tech: string[];
+    live?: string; // optional live demo URL
+  };
+
+  const projects: Project[] = [
+    {
+      title: "Smart Mails",
+      link: "https://github.com/Abhinav1326/BE-Final-Year-Project",
+      description:
+        "Developed Smart Mails, an AI-assisted tool that streamlines job applications by auto-extracting recruiter emails and sending customized application messages.",
+      tech:  ["Next.js", "React", "Tailwind CSS", "Firebase", "Node.js", "Nodemailer", "API", "Gemini AI"],
+      live: "https://smart-mail-beige.vercel.app/",
+    },
     {
       title: "Real-Time Job Seeker Automation",
       link: "https://github.com/Abhinav1326/BE-Final-Year-Project",
       description:
-        "Automated system to streamline job applications, reducing time spent manually applying. Includes filters and approval system.",
+        "Developed an automated system to streamline job applications on portals, reducing manual effort. The system auto-applies using filters and allows user approval before submission.",
       tech: ["React", "JavaScript", "ML", "Web API", "Puppeteer", "NodeJS", "Python"],
     },
     {
@@ -83,7 +99,24 @@ export default function Projects() {
                   ))}
                 </div>
               </div>
-              <div className="flex gap-4 mt-4">
+              <div className="flex items-center justify-between mt-4">
+                {/* Visit (live) button - only if project.live exists */}
+                {project.live ? (
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit ${project.title}`}
+                    className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-green-400 to-emerald-500 text-white font-medium shadow hover:scale-105 transition"
+                  >
+                    View Live
+                  </a>
+                ) : (
+                  <span />
+                )}
+
+                {/* Code links */}
+                <div className="flex gap-4">
                 <a
                   href={project.link}
                   target="_blank"
@@ -100,6 +133,7 @@ export default function Projects() {
                 >
                   <FaExternalLinkAlt size={20} />
                 </a>
+                </div>
               </div>
             </motion.div>
           ))}

@@ -22,13 +22,7 @@ export default function Projects() {
       tech:  ["Next.js", "React", "Tailwind CSS", "Firebase", "Node.js", "Nodemailer", "API", "Gemini AI"],
       live: "https://smart-mail-beige.vercel.app/",
     },
-    {
-      title: "Real-Time Job Seeker Automation",
-      link: "https://github.com/Abhinav1326/BE-Final-Year-Project",
-      description:
-        "Developed an automated system to streamline job applications on portals, reducing manual effort. The system auto-applies using filters and allows user approval before submission.",
-      tech: ["React", "JavaScript", "ML", "Web API", "Puppeteer", "NodeJS", "Python"],
-    },
+    
     {
       title: "Watch Together",
       link: "https://github.com/Abhinav1326/WatchTogether",
@@ -36,6 +30,14 @@ export default function Projects() {
         "Developed Watch Together, it is a real-time web app that lets users watch YouTube together, share screens, chat, and video call all in sync.",
       tech:  ["Next.js", "React", "Tailwind CSS", "Firebase", "Node.js", "Express", "WebRTC", "Socket.io", "YouTube API"],
       live: "https://watch-together-hc8i.vercel.app/",
+    },
+    {
+      title: "Real-Time Job Seeker Automation",
+      link: "https://github.com/Abhinav1326/BE-Final-Year-Project",
+      description:
+        "Developed an automated system to streamline job applications on portals, reducing manual effort. The system auto-applies using filters and allows user approval before submission.",
+      tech: ["React", "JavaScript", "ML", "Web API", "Puppeteer", "NodeJS", "Python"],
+      live: "https://be-final-year-project-sooty.vercel.app/"
     },
     {
       title: "AI Based Personal Voice Assistant (Veronica)",

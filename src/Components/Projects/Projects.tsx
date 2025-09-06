@@ -30,6 +30,14 @@ export default function Projects() {
       tech: ["React", "JavaScript", "ML", "Web API", "Puppeteer", "NodeJS", "Python"],
     },
     {
+      title: "Watch Together",
+      link: "https://github.com/Abhinav1326/WatchTogether",
+      description:
+        "Developed Watch Together, it is a real-time web app that lets users watch YouTube together, share screens, chat, and video call all in sync.",
+      tech:  ["Next.js", "React", "Tailwind CSS", "Firebase", "Node.js", "Express", "WebRTC", "Socket.io", "YouTube API"],
+      live: "https://watch-together-hc8i.vercel.app/",
+    },
+    {
       title: "AI Based Personal Voice Assistant (Veronica)",
       link: "https://github.com/Abhinav1326/Veronica-Personal-Voice-Assistant-",
       description:

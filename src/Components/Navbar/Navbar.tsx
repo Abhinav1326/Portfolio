@@ -51,7 +51,7 @@ export default function Navbar() {
           href="#home"
           className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400"
         >
-          Abhi.dev
+          Abhinav Gore
         </a>
 
         {/* Desktop Menu */}

@@ -57,7 +57,9 @@ export default function AnimeBuddyOverlay({
     window.addEventListener("resize", handleResize);
     handleResize();
     pos.current.x = 30;
-    pos.current.y = (window.innerHeight || 800) - spriteSize - 40;
+    const initialBase = sizeProp ?? baseSize;
+    const initialComputed = (window.innerWidth < 640 ? initialBase * 0.5 : initialBase);
+    pos.current.y = (window.innerHeight || 800) - initialComputed - 40;
     return () => window.removeEventListener("resize", handleResize);
   }, [baseSize, sizeProp]);
 

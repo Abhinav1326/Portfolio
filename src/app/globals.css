@@ -136,6 +136,15 @@ section[id] {
   scroll-margin-top: 4rem; /* adjust to match your nav height (e.g. 64px) */
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 /* visible focus styles */
 :focus-visible {
   outline: 3px solid rgba(99,102,241,0.16);
